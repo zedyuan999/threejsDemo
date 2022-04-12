@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 // Scene
 const scene = new THREE.Scene();
 
@@ -8,8 +9,8 @@ const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
 const sizes = {
-	width: 800,
-	height: 600,
+  width: 800,
+  height: 600,
 };
 
 // Camera
