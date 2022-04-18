@@ -1,30 +1,38 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
 // Scene
 const scene = new THREE.Scene();
 
+// const img = new Image()
+// const texture = new THREE.Texture(img)
+// img.onload = () => {
+//   texture.needsUpdate = true
+// }
+// img.src = require('../assets/images/color.jpg')
+const textureLoader = new THREE.TextureLoader()
+const texture = textureLoader.load(require('../assets/images/color.jpg'))
+
 // Cube
-const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const geometry = new THREE.BoxGeometry(1, 1, 1)
+const material = new THREE.MeshBasicMaterial({ map: texture });
 const mesh = new THREE.Mesh(geometry, material);
-// mesh.rotation.x = Math.PI * 0.25
-// mesh.rotation.y = Math.PI * 0.25
+// mesh.rotation.x = Math.PI * 0.1
+// mesh.rotation.y = Math.PI * 0.1
 scene.add(mesh);
+
 
 const sizes = {
   width: document.documentElement.clientWidth,
-  height: document.documentElement.clientHeight
+  height: document.documentElement.clientHeight,
 };
-
 
 // Axes
 const axesHelper = new THREE.AxesHelper(2)
-scene.add(axesHelper)
+// scene.add(axesHelper)
 
 // Camera
 const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 1000);
-// const aspectRatio = sizes.width / sizes.height
-// const camera = new THREE.OrthographicCamera(- 1 * aspectRatio, 1 * aspectRatio, 1, - 1, 0.1, 100)
 camera.position.z = 3;
 scene.add(camera);
 
@@ -45,16 +53,21 @@ window.addEventListener('mousemove', (event) => {
 const controls = new OrbitControls(camera, canvas)
 // 启用阻尼感
 controls.enableDamping = true
-// controls.target.y = 2
+
+window.addEventListener('resize', () => {
+  sizes.width = document.documentElement.clientWidth
+  sizes.height = document.documentElement.clientHeight
+  // 修改相机的宽高比
+  camera.aspect = sizes.width / sizes.height
+  // 更改相机属性后，需要通过这个API更新
+  camera.updateProjectionMatrix()
+  // 重新渲染
+  renderer.setSize(sizes.width, sizes.height)
+})
+
 const tick = () => {
-  // camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 2
-  // // 这个z轴是与x轴的缩放相抵消的
-  // camera.position.z = Math.cos(cursor.x * Math.PI * 2) * 2
-  // camera.position.y = cursor.y * 3
-  // camera.lookAt(mesh.position)
   controls.update()
   renderer.render(scene, camera);
   window.requestAnimationFrame(tick)
 }
 tick()
-
