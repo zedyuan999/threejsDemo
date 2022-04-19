@@ -3,6 +3,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { resolve } = require("path");
 
 const isProduction = process.env.NODE_ENV == "production";
 
@@ -16,6 +17,11 @@ const config = {
   devServer: {
     open: true,
     host: "localhost",
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
